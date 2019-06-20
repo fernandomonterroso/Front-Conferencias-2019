@@ -1,0 +1,264 @@
+<main role="main" *ngIf="!loading">
+    <section class="jumbotron text-center" id="container">
+        <div class="container">
+            <h1 id="cont" class="jumbotron-heading">C O N F E R E N C I A S</h1>
+            <p id="cont">Aqui se muestran las conferencias proximas a realizarse.</p>
+        </div>
+    </section>
+
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" *ngFor="let conferencia of conferencias">
+                    <div class="card mb-4 shadow-sm">
+                        <div width="100%" height="225">
+                            <img src="../../../assets/img/bg_2.jpg" width="100%" height="100%">
+                        </div>
+                        <div class="card-body">
+                            <h3>{{conferencia.nombreCharla}}</h3>
+                            <p class="card-text">{{conferencia.descripcion}}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal"
+                                        data-target="#ver" (click)="getConference(conferencia._id)">Ver</button>
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-toggle="modal"
+                                        data-target="#editar" *ngIf="admin == true"
+                                        (click)="getConference(conferencia._id)">Editar</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                                        data-target="#eliminar" *ngIf="admin == true"
+                                        (click)="getConference(conferencia._id)">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary btn-lg float-right rounded-circle d-print-flex" id="buttonAdd" data-toggle="modal"
+        *ngIf="admin == true" data-target="#agregar" style="height: 70px; width: 70px; margin:0 5vh 3vh 0; "><i
+            class="fas fa-plus"></i></button>
+</main>
+<div class="text-center" *ngIf="loading" id="spinner">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a >Back to top</a>
+            </p>
+    
+        </div>
+    </footer> -->
+
+<!--MODAL VISUALIZAR CONFERENCIA-->
+<div class="modal fade bd-example-modal-xl" id="ver" tabindex="-1" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{conferenciaSeleccionada.nombreCharla}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3>Conferenciasta: {{conferenciaSeleccionada.comunicador}}</h3>
+                <ul>
+                    <li>
+                        <h5>Descripcion: {{conferenciaSeleccionada.descripcion}}</h5>
+                    </li>
+                    <li>
+                        <h5>Hora: {{conferenciaSeleccionada.fecha}}</h5>
+                    </li>
+                    <li>
+                        <h5>Salon: {{conferenciaSeleccionada.salon}}</h5>
+                    </li>                    
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#enviarCorreo">Asistir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL AGREGAR CONFERENCIA-->
+
+<div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar conferencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #AgregarConferenciaForm="ngForm" (ngSubmit)="addConference()">
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Nombre</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput"
+                            placeholder="Nombre de la conferencia" name="nombreCharla" #nombreCharla='ngModel'
+                            [(ngModel)]="conferenciaModel.nombreCharla" id="nombreCharla">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Descripcion</label>
+                        <input type="text" class="form-control" placeholder="Descripcion de la conferencia"
+                            name="descripcion" #descripcion='ngModel' [(ngModel)]="conferenciaModel.descripcion"
+                            id="descripcion">
+                    </div>
+                    <!-- <br> -->
+                    <div class="text-center" *ngIf="loading" id="spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Comunicador</label>
+                        <input type="text" class="form-control" placeholder="Nombre del Comunicador" name="comunicador"
+                            #comunicador='ngModel' [(ngModel)]="conferenciaModel.comunicador" id="comunicador">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Salon</label>
+                        <input type="text" class="form-control" placeholder="Numero de salon" name="salon"
+                            #salon='ngModel' [(ngModel)]="conferenciaModel.salon" id="salon">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Numero de asientos</label>
+                        <input type="text" class="form-control" placeholder="Numero de asientos" name="numeroAsiento"
+                            #nombre='ngModel' [(ngModel)]="conferenciaModel.numeroAsiento" id="numeroAsiento">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Feha y Hora</label>
+                        <input placeholder="Selected date" type="date" class="form-control data-api" name="fecha"
+                            #fecha='ngModel' [(ngModel)]="conferenciaModel.fecha" id="fecha">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" (click)="activarCarga()">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL EDITAR CONFERENCIA-->
+<div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Conferencia:<br>
+                    {{conferenciaSeleccionada.nombreCharla}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #EditarConferenciaForm="ngForm" (ngSubmit)="updateConference(conferenciaSeleccionada._id)">
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Nombre</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput"
+                            placeholder="Nombre de la conferencia" name="nombreCharla" #nombreCharla='ngModel'
+                            [(ngModel)]="conferenciaSeleccionada.nombreCharla" id="nombreCharla">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Descripcion</label>
+                        <input type="text" class="form-control" placeholder="Descripcion de la conferencia"
+                            name="descripcion" #descripcion='ngModel' [(ngModel)]="conferenciaSeleccionada.descripcion"
+                            id="descripcion">
+                    </div>
+                    <div class="text-center" *ngIf="loading" id="spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Comunicador</label>
+                        <input type="text" class="form-control" placeholder="Nombre del Comunicador" name="comunicador"
+                            #comunicador='ngModel' [(ngModel)]="conferenciaSeleccionada.comunicador" id="comunicador">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Salon</label>
+                        <input type="text" class="form-control" placeholder="Numero de salon" name="salon"
+                            #salon='ngModel' [(ngModel)]="conferenciaSeleccionada.salon" id="salon">
+                    </div>
+                    <!-- <br> -->
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Numero de asientos</label>
+                        <input type="text" class="form-control" placeholder="Numero de asientos" name="numeroAsiento"
+                            #nombre='ngModel' [(ngModel)]="conferenciaSeleccionada.numeroAsiento" id="numeroAsiento">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Feha y Hora</label>
+                        <input placeholder="Selected date" type="date" class="form-control data-api" name="fecha"
+                            #fecha='ngModel' [(ngModel)]="conferenciaSeleccionada.fecha" id="fecha">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary"  (click)="activarCarga()">Editar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--MODAL ELIMINAR CONFERENCIA-->
+    <div class="modal fade" id="eliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form (ngSubmit)="deleteConference(conferenciaSeleccionada._id)">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Desea eliminar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="formGroupExampleInput">{{conferenciaSeleccionada.nombreCharla}}</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary">Si</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ASISTIR A CONFERENCIA -->
+    <div class="modal fade" id="enviarCorreo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Desea Asistir a la conferencia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="formGroupExampleInput">{{conferenciaSeleccionada.nombreCharla}}</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" (click)='descargarPdf()'>Si</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).off('.data-api')
+    </script>

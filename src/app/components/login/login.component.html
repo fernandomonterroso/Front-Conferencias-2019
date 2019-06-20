@@ -1,0 +1,35 @@
+<div class="bodyss">
+  <div class="container" >
+    <div class="row">
+      <div class="imgBx">
+        <img class="mb-4" src="../../../assets/img/Kinal.jpg" alt="" style="margin-left: 0; width: 65%; height: 110%;">
+      </div>
+  <div class="loginBox">
+    <form class="form-signin" (ngSubmit)="login()">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://camu.in/assets/img/avatar1.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Iniciar sesión</h1>
+      </div>    
+      <div class="text-center" *ngIf="loading" id="spinner">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <br>
+      <div class="form-label-group">
+        <input type="email" id="inputEmail" class="form-control" placeholder="Dirección de correo" required autofocus
+          name="email" #email='ngModel' [(ngModel)]="user.email">
+        <label for="inputEmail">Dirección de correo</label>
+      </div>
+  
+      <div class="form-label-group">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required name="password"
+          #password='ngModel' [(ngModel)]="user.password">
+        <label for="inputPassword">Contraseña</label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="activarCarga()">Iniciar sesión</button>
+    </form>
+  </div> 
+    </div>
+  </div>
+  </div>
