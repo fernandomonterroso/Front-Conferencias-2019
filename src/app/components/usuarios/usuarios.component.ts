@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
-import { User } from 'src/app/models/user.model';
-import { GLOBAL } from 'src/app/services/global.service';
+import { User } from '../../models/user.model';
+import { GLOBAL } from '../../services/global.service';
 
 @Component({
   selector: 'app-usuarios',

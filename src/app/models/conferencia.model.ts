@@ -6,8 +6,9 @@ export class Conferencia{
         public comunicador: String,
         public salon: String,
         public numeroAsiento:Number,
-        public fecha:Date,
+        public fecha:String,
         public capacidad: Number,
+        public image: String,
         public ocupados: string
     ){}
 }

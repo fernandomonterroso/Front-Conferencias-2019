@@ -1,3 +1,77 @@
+#return-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.7);
+  width: 50px;
+  height: 50px;
+  display: block;
+  text-decoration: none;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
+  display: none;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#return-to-top i {
+  color: #fff;
+  margin: 0;
+  position: relative;
+  left: 16px;
+  top: 13px;
+  font-size: 19px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#return-to-top:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+#return-to-top:hover i {
+  color: #fff;
+  top: 5px;
+}
+
+
+
+
+.caption div {
+  box-shadow: 0 0 5px #C8C8C8;
+  transition: all 0.3s ease 0s;
+}
+.img-circle {
+  border-radius: 50%;
+}
+.img-circle {
+  border-radius: 0;
+}
+
+.ratio {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  width: 100%;
+}
+.img-circle {
+  border-radius: 50%;
+}
+.img-responsive {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
@@ -46,21 +120,21 @@ footer p {
   margin-bottom: .25rem;
 }
 #container{
-  background-image: url(../../../assets/img/bg_1.jpg);
+  background-image: url(https://images-expokinal2019.s3.amazonaws.com/kinalaereo-min.jpg);
   background-repeat: no-repeat;
   background-position: 44% 33%;
-  width: 101%;
-  height: 101%;
+  width: 100%;
+  height: 100%;
   position: relative;
   left: -4px;
   
 }
 #container2{
-  background-image: url(../../../assets/img/bg_2.jpg);
+  background-image: url(https://images-expokinal2019.s3.amazonaws.com/kinal-20-DJI_0435-min.jpg);
   background-repeat: no-repeat;
   background-position: 44% 23%;
-  width: 101%;
-  height: 101%;
+  width: 100%;
+  height: 100%;
   position: relative;
   left: -4px;
   

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user.model';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -36,14 +36,23 @@ export class LoginComponent implements OnInit {
     this.user = new User('','', '', '', '', '', [{ productTableId: '', nombreProducto: '', cantidad: 0, precioIndividual: 0, totalProducto: 0 }], 0, '')
   }
 
-  public getToken(){
+  public getToken() {
     this._userService.login(this.user, 'true').subscribe(
       response=>{
-        this.token = response.token;        
+        this.token = JSON.stringify(response.token);   
+        console.log('este es el token -- ' + this.token);
+             
         if(this.token.length <= 0){
           this.status = 'error'
         }else{
           sessionStorage.setItem('token', this.token);
+          this._router.navigate(['/home']);
+          setTimeout(() => {  
+            window.location.reload()
+            setTimeout(() => {
+              this._router.navigate(['/home']);    
+            }, 100);
+          }, 0); 
         }
       },
       error=>{
@@ -60,7 +69,7 @@ export class LoginComponent implements OnInit {
     setTimeout(() => {
       this._userService.login(this.user).subscribe(
         response => {
-          this.identity = response.user;        
+          this.identity = response.user;               
           if(!this.identity){
             this.desactivarCarga();
             Swal.fire(response.message);
@@ -68,9 +77,10 @@ export class LoginComponent implements OnInit {
           }else{
             sessionStorage.setItem('identity', JSON.stringify(this.identity));
             this.getToken();
+            sessionStorage.setItem('token', JSON.stringify(this.token))
             this.desactivarCarga();
             this.status = 'ok';            
-            this._router.navigate(['/home']);            
+                      
           }
         },
         error => {

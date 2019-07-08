@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { Conferencia } from 'src/app/models/conferencia.model';
-import { ConferenciaService } from 'src/app/services/conferenica.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { Conferencia } from '../../models/conferencia.model';
+import { ConferenciaService } from '../../services/conferenica.service';
 import * as jsPDF from 'jspdf';
 import Swal from 'sweetalert2';
 
@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
   providers: [UserService, ConferenciaService]
 })
 export class ConferenciasComponent implements OnInit {
+  @ViewChild('timeConf') formValues;
   public conferencias: Conferencia;
   public conferenciaModel: Conferencia;
   public conferenciaSeleccionada: Conferencia;
@@ -20,20 +21,28 @@ export class ConferenciasComponent implements OnInit {
   public status;
   public admin: boolean;
   public loading: boolean;
+  public usuarioPdf:boolean = false;
+ 
 
   constructor(private _conferenceService: ConferenciaService, private _userService: UserService) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.conferenciaModel = new Conferencia('', '', '', '', '', 0, new Date(Date.now()), 0, '');
-    this.conferenciaSeleccionada = new Conferencia('', '', '', '', '', 0, new Date(Date.now()), 0, '');
+    this.conferenciaModel = new Conferencia('', '', '', '', '', 0,'' , 0, '','');
+    this.conferenciaSeleccionada = new Conferencia('', '', '', '', '', 0, '', 0, '','');
     this.admin = false;
     this.activarCarga();
   }
 
   ngOnInit() {
-    if (this.identity.rol == 'ROLE_ADMIN') {
-      console.log('hola admin')
-      this.admin = true;
+    if(this.identity){
+      if(this.identity.rol == 'ROLE_ADMIN'){
+        console.log('hola admin')
+        this.admin = true;
+      }else{
+        console.log('hola user')
+      }
+    }else{
+      console.log('no estas logueado')
     }
     this.getConferences()
   }
@@ -59,8 +68,7 @@ export class ConferenciasComponent implements OnInit {
       error => {
         var errorMessage = <any>error;
         console.log(errorMessage);
-        if (errorMessage != null) {
-          Swal.fire(error.error.message)
+        if (errorMessage != null) {          
           this.status = 'error'
         }
       }
@@ -87,6 +95,8 @@ export class ConferenciasComponent implements OnInit {
   }
 
   public addConference() {
+    console.log();
+    this.conferenciaModel.fecha = this.conferenciaModel.fecha+ ' '+ this.formValues.nativeElement.value
     setTimeout(() => {
       this._conferenceService.addConference(this.token, this.conferenciaModel).subscribe(
         response => {
@@ -96,7 +106,7 @@ export class ConferenciasComponent implements OnInit {
             this.desactivarCarga(); 
             Swal.fire({
               text: 'Conferencia creada',
-              type: 'error'
+              type: 'success'
             })
             this.getConferences();
             this.status = 'Ok'
@@ -185,13 +195,66 @@ export class ConferenciasComponent implements OnInit {
     }, 1500);
   }
 
+  asistir(id){
+    this._conferenceService.assistConference(id).subscribe(
+      response=>{
+        console.log(JSON.stringify(response));        
+        if(response.message){          
+          this.status='error';
+          this.desactivarCarga()
+          Swal.fire({
+            text: response.message,
+            type: 'success'
+          })          
+          
+          if(response.message == "inscripcion generada exitosamente"){
+            this.descargarPdf();  
+          }
+        }      
+      },
+      error => {        
+        var errorMessage = <any>error;
+        this.desactivarCarga()
+        console.log(errorMessage);
+        if(errorMessage != null){
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
   descargarPdf(){
     var x = Math.floor((Math.random() * 100) + 1);
     var y = Math.floor((Math.random() * 100) + 1);
-    const doc = new jsPDF();
-    doc.text('Hola esta es tu entrada para poder entrar al solon de la charla', 15,25);
-    doc.save('Entrada'+x+'-'+y+'.pdf');
+    var doc = new jsPDF('l', 'pt','a5',false);
+    var source = document.getElementById('print'); 
 
+        var specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+      const  margins = {
+            top: 20,
+            bottom: 20,
+            left: 20,
+            width: 530,
+        };
+
+        doc.fromHTML(
+            source, 
+            margins.left,  
+            margins.top, { 
+                'width': margins.width, 
+                'elementHandlers': specialElementHandlers
+            },
+            
+            function (dispose) {
+              doc.save('Entrada'+x+'-'+y+'.pdf');
+            }, margins
+        );
+   
+ 
     console.log(doc)
   }
 

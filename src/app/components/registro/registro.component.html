@@ -1,61 +1,40 @@
-<div class="bodyss">
-<div class="container" >
-  <div class="row">
-    <div class="imgBx">
-      <img class="mb-4" src="../../../assets/img/Kinal.jpg" alt="" style="margin-left: 0; width: 65%; height: 110%;">
-    </div>
-
-<div class="loginBox">
-  <form #registroForm="ngForm" (ngSubmit)="register()" style="width: 350px;position: relative;margin-left: 40px;">
-    <div class="text-center mb-4">
-      <img class="mb-4" src="https://camu.in/assets/img/avatar1.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Registrate</h1>
-    </div>
-    <div class="text-center" *ngIf="loading" id="spinner">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+<body>
+    <div id="wrapper">
+    <div id="left">
+      <div id="signin">
+        <div class="logo">
+          <img src="./assets/img/logo-en.png" alt="KINAL" />
+        </div>
+        <form #registroForm="ngForm" (ngSubmit)="register()">
+            <div>
+                <label>Nick</label>
+                <input type="text" id="Username" class="text-input"  placeholder="Nick" name="nombre" #nombre='ngModel'
+                [(ngModel)]="user.nombre" id="nombre">
+              </div>
+          <div>
+            <label>Correo</label>
+            <input type="text" id="inputEmail" class="text-input"  placeholder="Dirección de correo" required autofocus
+            name="email" #email='ngModel' [(ngModel)]="user.email">
+          </div>
+          <div>
+              <div class="text-center" *ngIf="loading" id="spinner">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+            <label>Contraseña</label>
+            <input type="password" class="text-input" id="inputPassword"  placeholder="Contraseña" required name="password"
+            #password='ngModel' [(ngModel)]="user.password"/>
+          </div>
+          <button type="submit" class="primary-btn" (click)="activarCarga()">Registrarse </button>
+        </form>
       </div>
     </div>
-    <div class="datos">
-      <div class="input-group"> 
-        <div class="input-group-prepend">
-          <span class="input-group-text">@</span>
-        </div>
-        <input type="text" class="form-control" placeholder="Username" name="nombre" #nombre='ngModel'
-          [(ngModel)]="user.nombre" id="nombre">
-      </div>
-      <br>
-      <!-- <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">2014-315(example)</span>
-        </div>
-        <input type="text" class="form-control" placeholder="Carnet" name="carnet" #carnet='ngModel'
-          [(ngModel)]="user.carnet" id="carnet">
-      </div> -->                
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="email" name="email" #email='ngModel'
-          [(ngModel)]="user.email" id="email">
-        <div class="input-group-append">
-          <span class="input-group-text">@example.com</span>
-        </div>
-      </div>
-      <br>
-      <div class="input-group">
-        <input type="password" class="form-control" placeholder="password" name="password" #password='ngModel'
-          [(ngModel)]="user.password" id="password">
-        <div class="input-group-append">
-          <span class="input-group-text">Password</span>
+    <div id="right">
+      <div id="showcase">
+        <div class="showcase-content">
         </div>
       </div>
     </div>
-    <br>
-    <br>
-    <div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="activarCarga()">Registrarse</button>
-    </div>
-  </form>
-</div>
-    
   </div>
-</div>
-</div>
+  </body>

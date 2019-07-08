@@ -39,7 +39,8 @@ export class UserService{
             user.gettoken = gettoken2;
         }
         let params = JSON.stringify(user);
-
+        console.log(params);
+        
         return this._http.post(this.url + '/login', params, {headers: this.headers})
     }
 

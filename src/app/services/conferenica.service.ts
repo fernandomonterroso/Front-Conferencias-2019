@@ -46,11 +46,10 @@ export class ConferenciaService {
         return this._http.delete(this.url + '/charla/delete/' + id, { headers: headers })
     }
 
-    assistConference(id, cantidad: Conferencia):Observable<any>{
-        let params = JSON.stringify(cantidad);
+    assistConference(id):Observable<any>{        
         let headers = new HttpHeaders().set('Content-type','application/json').set('Authorization', this._userService.getToken());
 
-        return this._http.put(this.url + '/charla/edit/'+id,params, {headers: headers});
+        return this._http.put(this.url + '/charla/occupy/'+id, null ,{headers: headers});
     }
 
 }
