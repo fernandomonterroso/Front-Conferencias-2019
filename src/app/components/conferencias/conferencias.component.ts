@@ -5,7 +5,7 @@ import { ConferenciaService } from '../../services/conferenica.service';
 import * as jsPDF from 'jspdf';
 import Swal from 'sweetalert2';
 import { Auxiliar } from 'src/app/models/auxiliar.model';
-
+import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-conferencias',
   templateUrl: './conferencias.component.html',
@@ -48,6 +48,12 @@ export class ConferenciasComponent implements OnInit {
       console.log('no estas logueado')
     }
     this.getConferences()
+  }
+
+  pruebaScreen(){
+    html2canvas(document.getElementById('print')).then(function(canvas) {
+      document.body.appendChild(canvas);
+  });
   }
 
   public activarCarga() {
@@ -236,6 +242,7 @@ export class ConferenciasComponent implements OnInit {
 
   asistir(id){
    this.hola();
+   this.pruebaScreen()
    this.auxiliarVariable = new Auxiliar(this.sources.innerHTML);
    console.log("AUXILIAR"+this.auxiliarVariable)
     this._conferenceService.assistConference(id, this.auxiliarVariable).subscribe(

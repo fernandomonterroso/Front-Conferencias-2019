@@ -1,3 +1,4 @@
+
 <main role="main" *ngIf="!loading">
         <section class="jumbotron text-center" id="container">
             <div class="container">
@@ -70,6 +71,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                
                 <div class="modal-body" id="print"> 
                     <h1 *ngIf="usuarioPdf == true">Usuario: {{identity.nombre}}</h1>
                     <h3>Conferenciasta: {{conferenciaSeleccionada.comunicador}}</h3>
@@ -82,7 +84,7 @@
                         </li>
                         <li>
                             <h5>Salon: {{conferenciaSeleccionada.salon}}</h5>
-                           <a href="www.facebook.com"> <ngx-qrcode  qrc-element-type="img" [qrc-value]="conferenciaSeleccionada._id">Hora</ngx-qrcode> </a>                
+                           <a href="www.facebook.com"> <ngx-qrcode  qrc-element-type="text" [qrc-value]="conferenciaSeleccionada._id">Hora</ngx-qrcode> </a>                
 
                         </li>      
                     </ul>
@@ -91,6 +93,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="usuarioPdf = false">Cerrar</button>
                     <button type="button" class="btn btn-primary" data-toggle="modal"
                     (click)="asistir(conferenciaSeleccionada._id); usuarioPdf = true" *ngIf="token">Asistir</button>
+                    <button (click)="pruebaScreen()" > prueba</button>
                 </div>
             </div>
         </div>
