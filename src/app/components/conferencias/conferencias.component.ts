@@ -4,6 +4,7 @@ import { Conferencia } from '../../models/conferencia.model';
 import { ConferenciaService } from '../../services/conferenica.service';
 import * as jsPDF from 'jspdf';
 import Swal from 'sweetalert2';
+import { Auxiliar } from 'src/app/models/auxiliar.model';
 
 @Component({
   selector: 'app-conferencias',
@@ -16,6 +17,7 @@ export class ConferenciasComponent implements OnInit {
   public conferencias: Conferencia;
   public conferenciaModel: Conferencia;
   public conferenciaSeleccionada: Conferencia;
+  public auxiliarVariable: Auxiliar;
   public identity;
   public token;
   public status;
@@ -29,6 +31,7 @@ export class ConferenciasComponent implements OnInit {
     this.token = this._userService.getToken();
     this.conferenciaModel = new Conferencia('', '', '', '', '', 0,'' , 0, '','');
     this.conferenciaSeleccionada = new Conferencia('', '', '', '', '', 0, '', 0, '','');
+
     this.admin = false;
     this.activarCarga();
   }
@@ -195,10 +198,49 @@ export class ConferenciasComponent implements OnInit {
     }, 1500);
   }
 
+  public sources;
+  public adios;
+  hola(){
+    var x = Math.floor((Math.random() * 100) + 1);
+    var y = Math.floor((Math.random() * 100) + 1);
+    var doc = new jsPDF('l', 'pt','a5',false);
+    this.sources = document.getElementById('print'); 
+
+        var specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+      const  margins = {
+            top: 20,
+            bottom: 20,
+            left: 20,
+            width: 530,
+        };
+
+        doc.fromHTML(
+            this.sources, 
+            margins.left,  
+            margins.top, { 
+                'width': margins.width, 
+                'elementHandlers': specialElementHandlers
+            },
+            
+            
+        );
+   
+ 
+    
+    // console.log(this.adios.innerHTML) 
+  }
+
   asistir(id){
-    this._conferenceService.assistConference(id).subscribe(
+   this.hola();
+   this.auxiliarVariable = new Auxiliar(this.sources.innerHTML);
+   console.log("AUXILIAR"+this.auxiliarVariable)
+    this._conferenceService.assistConference(id, this.auxiliarVariable).subscribe(
       response=>{
-        console.log(JSON.stringify(response));        
+        console.log(response);        
         if(response.message){          
           this.status='error';
           this.desactivarCarga()
@@ -220,8 +262,11 @@ export class ConferenciasComponent implements OnInit {
           this.status = 'error';
         }
       }
+      
     )
+    
   }
+
 
   descargarPdf(){
     var x = Math.floor((Math.random() * 100) + 1);

@@ -82,8 +82,9 @@
                         </li>
                         <li>
                             <h5>Salon: {{conferenciaSeleccionada.salon}}</h5>
+                           <a href="www.facebook.com"> <ngx-qrcode  qrc-element-type="img" [qrc-value]="conferenciaSeleccionada._id">Hora</ngx-qrcode> </a>                
+
                         </li>      
-                        <ngx-qrcode style="visibility: hidden"  qrc-element-type="img" [qrc-value]="conferenciaSeleccionada._id">Hora</ngx-qrcode>                
                     </ul>
                 </div>
                 <div class="modal-footer">
