@@ -5,7 +5,7 @@
         <div class="logo">
           <img src="./assets/img/logo-en.png" alt="KINAL" />
         </div>
-        <form #registroForm="ngForm" (ngSubmit)="register()">
+        <form>
             <div>
                 <label>Nick</label>
                 <input type="text" id="Username" class="text-input"  placeholder="Nick" name="nombre" #nombre='ngModel'
@@ -26,7 +26,7 @@
             <input type="password" class="text-input" id="inputPassword"  placeholder="Contraseña" required name="password"
             #password='ngModel' [(ngModel)]="user.password"/>
           </div>
-          <button type="submit" class="primary-btn" (click)="activarCarga()">Registrarse </button>
+          <button type="button" class="primary-btn" data-toggle="modal" data-target="#ver" (click)='codigoVerificacion()'>Registrarse </button>
         </form>
       </div>
     </div>
@@ -38,3 +38,30 @@
     </div>
   </div>
   </body>
+
+  <div class="modal fade bd-example-modal-xl" id="ver"  name="ver" tabindex="-1" role="dialog"
+        aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel"> Verificación de correo electronico </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="print">
+                    <form #Registrarse="ngForm" (ngSubmit)="register()"> 
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Codigo de verificacion</label>
+                    <input type="text" class="form-control data-api" id="codigoVer">
+                  </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="usuarioPdf = false">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" (click)="activarCarga()">Registrar</button>
+                </div>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>

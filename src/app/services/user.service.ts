@@ -18,8 +18,14 @@ export class UserService{
 
     register(user: User): Observable<any>{
         let params = JSON.stringify(user);
-
+        console.log(params);
+        
         return this._http.post(this.url + '/registrar', params,{headers: this.headers})
+    }
+
+    confirmarEmail(correo, codigo): Observable<any>{
+        
+        return this._http.put(this.url + '/email/'+correo+'/'+codigo,{headers: this.headers})
     }
 
     getUser(token, id): Observable<any> {

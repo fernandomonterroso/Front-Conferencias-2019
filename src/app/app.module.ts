@@ -15,6 +15,8 @@ import { HomelogComponent } from './components/homelog/homelog.component';
 import { NavComponent } from './components/nav/nav.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 
+import * as $ from 'jquery';
+import * as bootstrap from "bootstrap"
 
 @NgModule({
   declarations: [
