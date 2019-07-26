@@ -17,7 +17,8 @@ export class RegistroComponent implements OnInit {
   public loading: boolean;
   public cont: number;
   public codigo: string;
-
+  public token
+  identityDATA: string;
   constructor(private _userService: UserService, private _router: Router) {
     this.user = new User('','', '', '', '', '', [{ productTableId: '', nombreProducto: '', cantidad: 0, precioIndividual: 0, totalProducto: 0 }], 0, '')
     this.loading = false
@@ -34,6 +35,7 @@ export class RegistroComponent implements OnInit {
   }
 
   public nuevoCodigo(){
+    
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < 6; i++ ) {
@@ -50,13 +52,14 @@ export class RegistroComponent implements OnInit {
   }
 
   public codigoVerificacion() {
+    console.log(this.codigo)
     var correo = (<HTMLInputElement>document.getElementById('inputEmail')).value; 
     setTimeout(() => {
       if(correo){
       this._userService.confirmarEmail(correo, this.codigo).subscribe(
         response => {
           if (response ) {
-            console.log(response)
+            // console.log(response)
             this.desactivarCarga()            
             Swal.fire(response.message)            
             this.status = 'OK'                            
@@ -91,12 +94,18 @@ export class RegistroComponent implements OnInit {
       this._userService.register(this.user).subscribe(
         response => {
           if (response) {
-            console.log(response)
+            this.token = JSON.stringify(response.token); 
+            sessionStorage.setItem('token', this.token);
+            this.identityDATA = JSON.stringify(response.identityDATABack); 
+            sessionStorage.setItem('identity', this.identityDATA);
+            
+            // console.log(response)
             this.desactivarCarga()            
               Swal.fire(response.message)            
               this.status = 'OK'       
               $("#ver").modal("hide");
-              this._router.navigate(['/login']);
+
+              this._router.navigate(['/home']);
             }          
         },
         error => {

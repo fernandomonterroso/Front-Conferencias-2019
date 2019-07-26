@@ -29,6 +29,9 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                             data-target="#editar" *ngIf="admin == true"
                                             (click)="getConference(conferencia._id)">Editar</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                                             *ngIf="admin == true"
+                                            (click)="notificarRecordatorioCorreo(conferencia._id)">Notificar</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                             data-target="#eliminar" *ngIf="admin == true"
                                             (click)="getConference(conferencia._id)">Eliminar</button>

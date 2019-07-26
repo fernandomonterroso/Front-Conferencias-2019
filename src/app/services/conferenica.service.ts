@@ -4,6 +4,7 @@ import { GLOBAL } from './global.service';
 import { Conferencia } from "../models/conferencia.model";
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
+import { Auxiliar } from '../models/auxiliar.model';
 
 @Injectable()
 export class ConferenciaService {
@@ -32,6 +33,12 @@ export class ConferenciaService {
 
         return this._http.get(this.url + '/charla/search/' + id, { headers: headers })
     }
+    
+    NotificarConferencia(id): Observable<any> {
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this._http.get(this.url + '/charla/noti/' + id, { headers: headers })
+    }
 
     updateConference(id,conferencia: Conferencia): Observable<any>{
         let params = JSON.stringify(conferencia);
@@ -46,10 +53,12 @@ export class ConferenciaService {
         return this._http.delete(this.url + '/charla/delete/' + id, { headers: headers })
     }
 
-    assistConference(id):Observable<any>{        
+    assistConference(id,doc: Auxiliar):Observable<any>{        
         let headers = new HttpHeaders().set('Content-type','application/json').set('Authorization', this._userService.getToken());
-
-        return this._http.put(this.url + '/charla/occupy/'+id, null ,{headers: headers});
+        
+        let params = JSON.stringify(doc);
+        console.log("service"+params +" Token: "+this._userService.getToken())
+        return this._http.put(this.url + '/charla/occupy/'+id, params ,{headers: headers});
     }
 
 }

@@ -4,6 +4,7 @@ import { Conferencia } from '../../models/conferencia.model';
 import { ConferenciaService } from '../../services/conferenica.service';
 import * as jsPDF from 'jspdf';
 import Swal from 'sweetalert2';
+import { Auxiliar } from 'src/app/models/auxiliar.model';
 
 @Component({
   selector: 'app-conferencias',
@@ -22,6 +23,7 @@ export class ConferenciasComponent implements OnInit {
   public admin: boolean;
   public loading: boolean;
   public usuarioPdf:boolean = false;
+  public auxiliarVariable: Auxiliar;
  
 
   constructor(private _conferenceService: ConferenciaService, private _userService: UserService) {
@@ -92,6 +94,40 @@ export class ConferenciasComponent implements OnInit {
         }
       }
     )
+  }
+
+  public notificarRecordatorioCorreo(id) {
+    setTimeout(() => {
+      this._conferenceService.NotificarConferencia(id).subscribe(
+        response => {
+          console.log("RESPONSE::"+response)
+          if (response.message) {
+            console.log(response.message);
+            this.desactivarCarga(); 
+            Swal.fire({
+              text: response.message,
+              type: 'success'
+            })
+            this.status = 'Ok'
+          } else {
+            this.desactivarCarga()
+            console.log(response)
+          }
+        },
+        error => {
+          var errorMessage = <any>error;
+          console.log(errorMessage)
+          if (errorMessage != null) {
+            this.desactivarCarga()
+            Swal.fire({
+              text: error.error.message,
+              type: 'error'
+            })
+            this.status = 'error'
+          }
+        }
+      )
+    }, 1500);
   }
 
   public addConference() {
@@ -196,7 +232,9 @@ export class ConferenciasComponent implements OnInit {
   }
 
   asistir(id){
-    this._conferenceService.assistConference(id).subscribe(
+    this.correoQR();
+    this.auxiliarVariable = new Auxiliar(this.extraccionHTML.innerHTML);
+    this._conferenceService.assistConference(id, this.auxiliarVariable).subscribe(
       response=>{
         console.log(JSON.stringify(response));        
         if(response.message){          
@@ -222,6 +260,42 @@ export class ConferenciasComponent implements OnInit {
       }
     )
   }
+
+  public extraccionHTML
+  correoQR(){
+    var x = Math.floor((Math.random() * 100) + 1);
+    var y = Math.floor((Math.random() * 100) + 1);
+    var doc = new jsPDF('l', 'pt','a5',false);
+    this.extraccionHTML = document.getElementById('print'); 
+
+        var specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+      const  margins = {
+            top: 20,
+            bottom: 20,
+            left: 20,
+            width: 530,
+        };
+
+        doc.fromHTML(
+            this.extraccionHTML, 
+            margins.left,  
+            margins.top, { 
+                'width': margins.width, 
+                'elementHandlers': specialElementHandlers
+            },
+            
+            
+        );
+   
+ 
+    
+    // console.log(this.adios.innerHTML) 
+  }
+
 
   descargarPdf(){
     var x = Math.floor((Math.random() * 100) + 1);
@@ -257,5 +331,4 @@ export class ConferenciasComponent implements OnInit {
  
     console.log(doc)
   }
-
 }
